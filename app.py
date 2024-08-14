@@ -20,7 +20,7 @@ selected_category = st.sidebar.selectbox("Choose Category", categories)
 
 
 st.header("Category Analysis")
-grouped_stats = sales_data.groupby(['Category', 'ProductName']).agg(
+grouped_stats = sales_data.groupby(['Category']).agg(
     TotalSales_Median=('TotalSales', 'median'),
     TotalSales_Sum=('TotalSales', 'sum'),
     TotalSales_Min=('TotalSales', 'min'),
