@@ -17,45 +17,56 @@ st.sidebar.title("Walmart Product Analysis")
 categories = sales_data['Category'].unique()
 selected_category = st.sidebar.selectbox("Choose Category", categories)
 
-st.header("Category Analysis")
-grouped_stats = sales_data.groupby(['Category']).agg(
-    TotalSales_Median=('TotalSales', 'median'),
-    TotalSales_Sum=('TotalSales', 'sum'),
-    TotalSales_Min=('TotalSales', 'min'),
-    TotalSales_Max=('TotalSales', 'max')
-).reset_index()
+if 'analysis_clicked' not in st.session_state:
+    st.session_state['analysis_clicked'] = False
 
-col1, col2, col3, col4 = st.columns(4)
-with col1:
-    st.header("Total Sales Median")
-    st.write(grouped_stats['TotalSales_Median'].mean())
-with col2:
-    st.header("Total Sales Sum")
-    st.write(grouped_stats['TotalSales_Sum'].sum())
-with col3:
-    st.header("Total Sales Min")
-    st.write(grouped_stats['TotalSales_Min'].min())
-with col4:
-    st.header("Total Sales Max")
-    st.write(grouped_stats['TotalSales_Max'].max())
+if not st.session_state['analysis_clicked']:
+    st.header("Category Analysis")
 
-col1, col2 = st.columns(2)
-with col1:
-    top_categories = sales_data.groupby('Category')['TotalSales'].sum().nlargest(5)
-    fig, ax = plt.subplots()
-    sns.barplot(x=top_categories.values, y=top_categories.index, ax=ax, palette="husl")
-    ax.set_xlabel('Total Sales')
-    ax.set_ylabel('Category')
-    ax.set_title('Top 5 Categories by Sales')
-    st.pyplot(fig)
 
-with col2:
-    st.write("Top 5 Categories by Sentiment")
-    top_5_sentiment = sentiment_data.sort_values(by='SentimentScore1_10', ascending=False).head(5)
-    top_5_sentiment_display = top_5_sentiment[['Category', 'SentimentScore1_10', 'Rank by Total Sales']]
-    st.dataframe(top_5_sentiment_display, use_container_width=True)
+    grouped_stats = sales_data.groupby(['Category']).agg(
+        TotalSales_Median=('TotalSales', 'median'),
+        TotalSales_Sum=('TotalSales', 'sum'),
+        TotalSales_Min=('TotalSales', 'min'),
+        TotalSales_Max=('TotalSales', 'max')
+    ).reset_index()
 
-if st.sidebar.button("Show Analysis"):
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.header("Total Sales Median")
+        st.write(grouped_stats['TotalSales_Median'].mean())
+    with col2:
+        st.header("Total Sales Sum")
+        st.write(grouped_stats['TotalSales_Sum'].sum())
+    with col3:
+        st.header("Total Sales Min")
+        st.write(grouped_stats['TotalSales_Min'].min())
+    with col4:
+        st.header("Total Sales Max")
+        st.write(grouped_stats['TotalSales_Max'].max())
+
+    col1, col2 = st.columns(2)
+    with col1:
+        top_categories = sales_data.groupby('Category')['TotalSales'].sum().nlargest(5)
+        fig, ax = plt.subplots()
+        sns.barplot(x=top_categories.values, y=top_categories.index, ax=ax, palette="husl")
+        ax.set_xlabel('Total Sales')
+        ax.set_ylabel('Category')
+        ax.set_title('Top 5 Categories by Sales')
+        st.pyplot(fig)
+
+    with col2:
+        st.write("Top 5 Categories by Sentiment")
+        top_5_sentiment = sentiment_data.sort_values(by='SentimentScore1_10', ascending=False).head(5)
+        top_5_sentiment_display = top_5_sentiment[['Category', 'SentimentScore1_10', 'Rank by Total Sales']]
+        st.dataframe(top_5_sentiment_display, use_container_width=True)
+
+    if st.sidebar.button("Show Analysis"):
+        st.session_state['analysis_clicked'] = True
+        st.experimental_rerun()
+
+
+else:
     st.header(f"Analysis for {selected_category}")
 
     category_data = sales_data[sales_data['Category'] == selected_category]
