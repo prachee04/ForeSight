@@ -67,9 +67,10 @@ if button:
     st.write(future_df)
 
     fig_forecast = plt.figure(figsize=(10, 6))
-    plt.plot(df, label='Historical Data')
-    plt.plot(future_df['Date'], future_df['Forecast'], label='Forecast', color='red')
+    plt.plot(df, label='Historical Data', marker = 'o')
+    plt.plot(future_df['Date'], future_df['Forecast'], label='Forecast', color='red', marker = 'o')
     plt.xlabel('Year')
     plt.ylabel('Value')
+    plt.grid()
     plt.legend()
     st.pyplot(fig_forecast)

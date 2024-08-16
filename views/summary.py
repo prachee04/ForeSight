@@ -24,16 +24,20 @@ grouped_stats = sales_data.groupby(['Category']).agg(
 col1, col2, col3, col4 = st.columns(4)
 with col1:
     st.header("Total Sales Median")
-    st.write(grouped_stats['TotalSales_Median'].mean())
+    st.write(grouped_stats['TotalSales_Median'])
+    st.write("Value: ", grouped_stats['TotalSales_Median'].mean())
 with col2:
     st.header("Total Sales Sum")
-    st.write(grouped_stats['TotalSales_Sum'].sum())
+    st.write(grouped_stats['TotalSales_Sum'])
+    st.write("Value: ", grouped_stats['TotalSales_Sum'].sum())
 with col3:
     st.header("Total Sales Min")
-    st.write(grouped_stats['TotalSales_Min'].min())
+    st.write(grouped_stats['TotalSales_Min'])
+    st.write("Value: ", round(grouped_stats['TotalSales_Sum'].min(),4))
 with col4:
     st.header("Total Sales Max")
-    st.write(grouped_stats['TotalSales_Max'].max())
+    st.write(grouped_stats['TotalSales_Max'])
+    st.write("Value: ", grouped_stats['TotalSales_Sum'].max())
 
 col1, col2 = st.columns(2)
 with col1:

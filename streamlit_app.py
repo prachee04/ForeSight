@@ -31,4 +31,7 @@ pg = st.navigation({
     "Analytics" : [summary, category_analysis, demand_forecasting]
 })
 
+
+st.logo("assets/ForeSight.png")
+
 pg.run()
